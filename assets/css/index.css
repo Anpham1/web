@@ -184,13 +184,6 @@ a {
 }
 
 
-.art {
-    animation: rolling-disk 7.5s 0.25s linear infinite;
-}
-.prog-bar-inner {
-    animation: timer 30s linear 0.1s;
-}
-
 /*      keyframes   */
 @keyframes timer {
     0%      {width: 0%;}

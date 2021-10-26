@@ -32,7 +32,7 @@
 				<div class="prog-bar">
 					<div class="prog-bar-inner"></div>
 				</div>
-			</div><audio src="./assets/music/HappyNewYear.mp3" autoplay></audio>
+			</div><audio id="audio" src="./assets/music/HappyNewYear.mp3"></audio>
 			
 			<ul class="buttons">
 				<a href="#" class="button button-sm">
@@ -63,7 +63,15 @@
 			Inspired by <a href="https://dribbble.com/shots/9168665-Neumorphism-Music-App">Antonio Hristovski</a>'s Dribble layout.
 			Built by <a href="https://twitter.com/TutulDevs">Tutul</a>.
 		</section>
-	
+	<script>
+		const audio = document.getElementById("audio");
+		
+		const playBtn = document.querySelector(".button-lg");
+		playBtn.onclick = function() {
+		audio.play();
+		};
+			
+	</script>
 	<script src="https://kit.fontawesome.com/7d35781f0a.js" crossorigin="anonymous"></script> 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 	</body>

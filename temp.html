@@ -82,7 +82,7 @@
 		        ],
 			    
 			loadCurrentSong: function() {
-            		    audio.src = `./assets/music/HappyNewYear.mp3`;
+            		    audio.src = `${this.songs.map(song => `${song.path}`)}`;
         		},
 			    
 			handleEvent: function() {
@@ -102,8 +102,8 @@
 			},
 
 			start: function() {
-			    handleEvent();
-			    loadCurrentSong();
+			    this.loadCurrentSong();
+			    this.handleEvent();
 			},
 		    };
 		    app.start();

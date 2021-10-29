@@ -32,7 +32,7 @@
 				<div class="prog-bar">
 					<div class="prog-bar-inner"></div>
 				</div>
-			</div><audio id="audio" src="./assets/music/HappyNewYear.mp3"></audio>
+			</div><audio id="audio" src=""></audio>
 			
 			<ul class="buttons">
 				<a href="#" class="button button-sm">
@@ -64,12 +64,52 @@
 			Built by <a href="https://twitter.com/TutulDevs">Tutul</a>.
 		</section>
 	<script>
-		const audio = document.getElementById("audio");
-		
-		const playBtn = document.querySelector(".button-lg");
-		playBtn.onclick = function() {
-		audio.play();
+		function main() {
+
+		    const $ = document.querySelector.bind(document);
+
+		    const playBtn = $('.button-lg');
+		    const audio = $('#audio');
+
+		    let isPlay = false;
+
+		    const app = {
+			
+			const songs = [
+			    {
+				path: './assets/music/HappyNewYear.mp3',
+		    	    },
+		        ],
+			    
+			loadCurrentSong: function() {
+            		    audio.src = `${songs.map(song => `${song.path}`)}`;
+        		},
+			    
+			handleEvent: function() {
+			    playBtn.onclick = function() {
+				if(isPlay) {
+				    audio.pause();
+				}else{
+				    audio.play();
+				}
+			    };
+			    audio.onplay = function() {
+				isPlay = true;
+			    };
+			    audio.onpause = function() {
+				isPlay = false;
+			    };
+			},
+
+			start: function() {
+			    handleEvent();
+			    loadCurrentSong();
+			},
+		    };
+		    app.start();
+
 		};
+		main();
 			
 	</script>
 	<script src="https://kit.fontawesome.com/7d35781f0a.js" crossorigin="anonymous"></script> 

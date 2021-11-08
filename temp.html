@@ -196,6 +196,9 @@
 						}else{
 							that.prevPlay();
 						};
+						that.loadCurrentSong();
+						that.render();
+				
 						audio.play();
 					};
 
@@ -205,6 +208,8 @@
 						}else{
 							that.nextPlay();
 						};
+						that.loadCurrentSong();
+						that.render();
 						audio.play();
 					};
 

@@ -29,13 +29,10 @@
 					<p class="left">0:00</p>
 					<p class="right">2:06</p>
 				</div>
-				<div class="prog-bar">
-					<div class="prog-bar-inner"></div>
-				</div>
-			</div><audio id="audio" src=""></audio>
-			
+				<input class="prog-bar-inner" type="range" value="0" step="1" min="0" max="100">
+			</div><!--  progress  -->
 			<ul class="buttons">
-				<a href="#" class="button button-sm">
+				<a href="#" class="button button-sm random">
 					<i class="fas fa-random fa-sm" aria-hidden="true"></i>
 					<span class="sr-only">Shuffle</span>
 				</a>
@@ -47,22 +44,27 @@
 					<i class="fas fa-pause fa-lg" aria-hidden="true" aria-hidden="true"></i>
 					<span class="sr-only">Pause</span>
 				</a>
-				<a href="#" class="button button-md">
+				<a href="#" class="button button-md next">
 					<i class="fas fa-step-forward"></i>
 					<span class="sr-only">Next Music</span>
 				</a>
-				<a href="#" class="button button-sm">
+				<a href="#" class="button button-sm repeat">
 					<i class="fas fa-circle-notch fa-sm" aria-hidden="true"></i>
 					<span class="sr-only">Repeat Song</span>
 				</a>
 			</ul><!--  buttons  -->
+			<div class="playlist"></div>
 			<div class="bar"></div><!--  bar  -->
+			<audio id="audio" src=""></audio>
+
 		</main>
 	
 		<section class="credit">
 			Inspired by <a href="https://dribbble.com/shots/9168665-Neumorphism-Music-App">Antonio Hristovski</a>'s Dribble layout.
 			Built by <a href="https://twitter.com/TutulDevs">Tutul</a>.
 		</section>
+	
+	<script src="https://kit.fontawesome.com/7d35781f0a.js" crossorigin="anonymous"></script>
 	<script>
 		function main() {
 
@@ -94,14 +96,24 @@
 						path: './assets/music/HappyNewYear.mp3' 
 					},
 					{
-						name: 'A new world',
-						singer: 'Peter',
-						path: ''
+						name: 'Hello',
+						singer: 'LionelRichie',
+						path: './assets/music/Hello-LionelRichie_3qx5n.mp3'
 					},
 					{
-						name: 'A new world',
-						singer: 'Peter',
-						path: ''
+						name: 'Only love',
+						singer: 'Trademark',
+						path: './assets/music/OnlyLove-Trademark-437693.mp3'
+					},
+					{
+						name: 'The first go to school',
+						singer: 'XuanMai',
+						path: './assets/music/NgayDauTienDiHoc-XuanMai_rc55.mp3'
+					},
+					{
+						name: 'My heart will go on',
+						singer: 'CelineDion',
+						path: './assets/music/MyHeartWillGoOnLoveThemefromTitanic-CelineDion-5868119.mp3'
 					}
 				],
 
@@ -116,7 +128,7 @@
 				render: function() {
 					const htmls = this.songs.map((song, index) => {
 						return `
-							<div class="song">
+							<div class="song ${index === this.currentIndex ? 'active' : ''}" data-index="${index}">
 								<h3>${song.name}</h3>
 								<p>${song.singer}</p>
 							</div>
@@ -205,6 +217,21 @@
 						that.isRandom = !that.isRandom;
 						randomBtn.classList.toggle('active', that.isRandom);
 					};
+
+					playlist.onclick = function(e) {
+						const songNode = event.target.closest(".song:not('.active')");
+						if(songNode || event.target.closest(".option")) {
+							if(songNode) {
+								that.currentIndex = Number(songNode.dataset.index);
+							};
+							if(event.target.closest(".option")) {
+
+							};
+						};
+						that.loadCurrentSong();
+						that.render();
+						audio.play();
+					};
 				},
 
 				nextPlay: function() {
@@ -229,7 +256,7 @@
 				loadCurrentSong: function() {
 					heading.textContent = this.currentSong.name;
 					author.innerText = this.currentSong.singer;
-					//audio.src = this.currentSong.path;
+					audio.src = this.currentSong.path;
 				},
 				
 				start: function() {
@@ -244,9 +271,7 @@
 			app.start();
 		};
 		main();
-			
 	</script>
-	<script src="https://kit.fontawesome.com/7d35781f0a.js" crossorigin="anonymous"></script> 
 	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
 	</body>
 </html>

@@ -66,48 +66,182 @@
 	<script>
 		function main() {
 
-		    const $ = document.querySelector.bind(document);
+			const $ = document.querySelector.bind(document);
 
-		    const playBtn = $('.button-lg');
-		    const audio = $('#audio');
+			const playlist = $('.playlist');
+			const heading = $('.info h1');
+			const author = $('.info p');
+			const cd = $('.art');
+			const progress = $('.prog-bar-inner');
+			const playBtn = $('.button-lg');
+			const prevBtn = $('.button-md');
+			const nextBtn = $('.next');
+			const repeatBtn = $('.repeat');
+			const randomBtn = $('.random');
+			const player = $('.player');
 
-		    let isPlay = false;
+			const app = {
 
-		    const app = {
-			
-			songs: [
-			    {
-				path: './assets/music/HappyNewYear.mp3',
-		    	    },
-		        ],
-			    
-			loadCurrentSong: function() {
-            		    audio.src = `${this.songs.map(song => `${song.path}`)}`;
-        		},
-			    
-			handleEvent: function() {
-			    playBtn.onclick = function() {
-				if(isPlay) {
-				    audio.pause();
-				}else{
-				    audio.play();
+				currentIndex: 0,
+				isPlaying: false,
+				isRepeat: false,
+				isRandom: false,
+
+				songs: [
+					{
+						name: 'Happy new year',
+						singer: 'Join',
+						path: './assets/music/HappyNewYear.mp3' 
+					},
+					{
+						name: 'A new world',
+						singer: 'Peter',
+						path: ''
+					},
+					{
+						name: 'A new world',
+						singer: 'Peter',
+						path: ''
+					}
+				],
+
+				defineProperties: function() {
+					Object.defineProperty(this, "currentSong", {
+						get: function() {
+							return this.songs[this.currentIndex];
+						}
+					});
+				},
+
+				render: function() {
+					const htmls = this.songs.map((song, index) => {
+						return `
+							<div class="song">
+								<h3>${song.name}</h3>
+								<p>${song.singer}</p>
+							</div>
+						`;
+					});
+					playlist.innerHTML = htmls.join('');
+				},
+
+				handleEvent: function() {
+				
+					const that = this;
+
+					document.onscroll = function() {
+						let scrollTop = window.scrollY ||
+						document.documentElement.scrollTop;
+						
+						let cdHeight = cd.offsetHeight;
+						let newCd = cdHeight - scrollTop;
+
+						cd.style.height = newCd > 0 ? newCd + 'px' : 0;
+						cd.style.opacity = newCd / cdHeight;
+					};
+
+					audio.ontimeupdate = function() {
+						if(audio.duration){
+							let progressPercent = audio.currentTime / audio.duration * 100;
+							progress.value = Math.floor(progressPercent);
+						};
+					};
+
+					progress.onchange = function(){
+						let seekTime = event.target.value * audio.duration / 100;
+						audio.currentTime = seekTime;
+					};
+					
+					playBtn.onclick = function() {
+						if(that.isPlaying) {
+							audio.pause();
+						}else {
+							audio.play();
+						};
+					};
+
+					audio.onplay = function() {
+						that.isPlaying = true;
+						player.classList.add('playing');
+					};
+
+					audio.onpause = function() {
+						that.isPlaying = false;
+						player.classList.remove('playing');
+					};
+
+					audio.onended = function() {
+						if(isRepeat) {
+							audio.play();
+						}else{
+							nextBtn.click();
+						};
+					};
+
+					prevBtn.onclick = function() {
+						if(that.isRandom) {
+							that.randomPlaySong();
+						}else{
+							that.prevPlay();
+						};
+						audio.play();
+					};
+
+					nextBtn.onclick = function() {
+						if(that.isRandom) {
+							that.randomPlaySong();
+						}else{
+							that.nextPlay();
+						};
+						audio.play();
+					};
+
+					repeatBtn.onclick = function() {
+						that.isRepeat = !that.isRepeat;
+						repeatBtn.classList.toggle('active', that.isRepeat);
+					};
+
+					randomBtn.onclick = function() {
+						that.isRandom = !that.isRandom;
+						randomBtn.classList.toggle('active', that.isRandom);
+					};
+				},
+
+				nextPlay: function() {
+					this.currentIndex ++;
+					if(this.currentIndex >= this.songs.length) {
+						this.currentIndex = 0;
+					};
+				},
+
+				prevPlay: function() {
+					this.currentIndex --;
+					if(this.currentIndex < 0) {
+						this.currentIndex = this.songs.length - 1;
+					};
+				},
+
+				randomPlaySong: function() {
+					let randomIndex = Math.floor(Math.random() * this.songs.length);
+					this.currentIndex = randomIndex;
+				},
+
+				loadCurrentSong: function() {
+					heading.textContent = this.currentSong.name;
+					author.innerText = this.currentSong.singer;
+					//audio.src = this.currentSong.path;
+				},
+				
+				start: function() {
+				
+					this.handleEvent();
+					this.defineProperties();
+					this.loadCurrentSong();
+
+					this.render();
 				}
-			    };
-			    audio.onplay = function() {
-				isPlay = true;
-			    };
-			    audio.onpause = function() {
-				isPlay = false;
-			    };
-			},
-
-			start: function() {
-			    this.loadCurrentSong();
-			    this.handleEvent();
-			},
-		    };
-		    app.start();
-
+			};
+			app.start();
 		};
 		main();
 			

@@ -88,6 +88,11 @@ a {
 .active {
     color: red;
 }
+
+.random.active .fa-random,
+.repeat.active .fa-circle-notch {
+    color: red;
+}
 .info {
     margin: 1.5rem 0;
     text-align: center;

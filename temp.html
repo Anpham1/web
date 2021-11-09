@@ -185,7 +185,7 @@
 					};
 
 					audio.onended = function() {
-						if(isRepeat) {
+						if(that.isRepeat) {
 							audio.play();
 						}else{
 							nextBtn.click();
@@ -226,7 +226,7 @@
 					};
 
 					playlist.onclick = function(e) {
-						const songNode = event.target.closest(".song:not('.active')");
+						const songNode = event.target.closest(".song:not(.active)");
 						if(songNode || event.target.closest(".option")) {
 							if(songNode) {
 								that.currentIndex = Number(songNode.dataset.index);
@@ -256,8 +256,16 @@
 				},
 
 				randomPlaySong: function() {
-					let randomIndex = Math.floor(Math.random() * this.songs.length);
+					let randomIndex = 0;
+					
+			                do{
+						
+					randomIndex = Math.floor(Math.random() * this.songs.length);
+						
+					}while(randomIndex === this.currentIndex);
+					
 					this.currentIndex = randomIndex;
+				
 				},
 
 				loadCurrentSong: function() {
